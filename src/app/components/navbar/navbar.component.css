@@ -1,0 +1,24 @@
+.navbar {
+  background-color: #1f1f1f;
+  padding: 10px 20px;
+  display: flex;
+  justify-content: center;
+  border-bottom: 2px solid #333;
+}
+
+.nav-links {
+  list-style: none;
+  display: flex;
+  gap: 20px;
+}
+
+.nav-links li a {
+  color: #fff;
+  text-decoration: none;
+  font-weight: bold;
+  font-size: 16px;
+}
+
+.nav-links li a:hover {
+  text-decoration: underline;
+}

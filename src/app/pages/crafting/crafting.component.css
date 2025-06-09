@@ -1,0 +1,110 @@
+.page {
+  display: flex;
+  height: 100vh;
+  width: 100vw;
+  background-color: #004f4f;
+  color: white;
+  font-family: 'Segoe UI', sans-serif;
+}
+
+/* === Columna izquierda === */
+.left-column {
+  flex: 2;
+  padding: 2rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.search-input {
+  width: 60%;
+  max-width: 500px;
+  padding: 0.5rem;
+  font-size: 1rem;
+  margin-bottom: 1.5rem;
+  border-radius: 4px;
+  border: none;
+  text-align: center;
+}
+
+.results-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(64px, 1fr));
+  gap: 0.5rem;
+  width: 100%;
+  max-width: 800px;
+  justify-items: center;
+  overflow-y: auto;
+  height: calc(100vh - 180px);
+}
+
+.result-item {
+  width: 64px;
+  height: 64px;
+  background-color: #1a1a1a;
+  border: 1px solid #444;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: transform 0.1s ease;
+}
+
+.result-item:hover {
+  transform: scale(1.05);
+  border-color: #00ffcc;
+}
+
+.result-item img {
+  width: 48px;
+  height: 48px;
+}
+
+/* === Columna derecha === */
+.right-column {
+  flex: 1;
+  padding: 2rem;
+  border-left: 2px solid #226666;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(3, 80px);
+  gap: 6px;
+  margin-bottom: 1rem;
+}
+
+.grid-cell {
+  width: 80px;
+  height: 80px;
+  background-color: #1a1a1a;
+  border: 1px solid #444;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.grid-cell img {
+  width: 64px;
+  height: 64px;
+}
+
+.result-img {
+  width: 64px;
+  height: 64px;
+  background-color: #1a1a1a;
+  border: 1px solid #444;
+}
+
+.favorite-button {
+  background-color: #00aa88;
+  color: white;
+  padding: 0.5rem 1rem;
+  border: none;
+  border-radius: 4px;
+  margin-top: 1rem;
+  cursor: pointer;
+}

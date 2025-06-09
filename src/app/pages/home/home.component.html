@@ -1,0 +1,32 @@
+<div class="container">
+  <div class="main">
+    <input type="checkbox" id="chk" aria-hidden="true" />
+
+    <!-- Logo -->
+
+    <img id="logo" src="/mmlogopeqsinfondo.png" alt="Minecraft Manager Logo">
+
+    <!-- Registro -->
+    <div class="signup">
+      <form (ngSubmit)="register()">
+        <label for="chk" aria-hidden="true">Register</label>
+        <input [(ngModel)]="regUsername" name="regUsername" type="text" placeholder="Username" required />
+        <input [(ngModel)]="regEmail" name="regEmail" type="email" placeholder="Email" required />
+        <input [(ngModel)]="regPassword" name="regPassword" type="password" placeholder="Password" required />
+        <button id="register-btn" type="submit">Register</button>
+        <p>{{ registerMessage }}</p>
+      </form>
+    </div>
+
+    <!-- Login -->
+    <div class="login">
+      <form (ngSubmit)="login()">
+        <label for="chk" aria-hidden="true">Login</label>
+        <input [(ngModel)]="username" name="username" type="text" placeholder="Username" required />
+        <input [(ngModel)]="password" name="password" type="password" placeholder="Password" required />
+        <button id="login-btn" type="submit">Login</button>
+        <p>{{ loginMessage }}</p>
+      </form>
+    </div>
+  </div>
+</div>

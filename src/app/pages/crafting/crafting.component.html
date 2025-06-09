@@ -1,0 +1,38 @@
+<app-navbar></app-navbar>
+<div class="page">
+  <!-- Zona izquierda: buscador y grid -->
+  <div class="left-column">
+    <input [formControl]="searchControl" placeholder="BUSCA AQUI TU RECETA" class="search-input"/>
+
+    <div class="results-grid">
+      <div
+        class="result-item"
+        *ngFor="let recipe of filteredRecipes"
+        (click)="selectRecipe(recipe)"
+        title="{{ recipe.output.name }}"
+      >
+        <img [src]="getImage(recipe.output.name)"/>
+      </div>
+    </div>
+  </div>
+
+  <!-- Zona derecha: detalle -->
+  <div class="right-column" *ngIf="selectedRecipe">
+    <h2>{{ selectedRecipe.name }}</h2>
+
+    <div class="grid">
+      <ng-container *ngFor="let item of selectedRecipe.grid">
+        <div class="grid-cell">
+          <img *ngIf="item" [src]="getImage(item)"/>
+        </div>
+      </ng-container>
+    </div>
+
+    <p><strong>Resultado:</strong></p>
+    <img [src]="getImage(selectedRecipe.output.name)" class="result-img"/>
+  </div>
+  <div class="favorite-wrapper">
+    <button class="favorite-button" (click)="addToFavorites()">💖 Guardar en favoritos</button>
+  </div>
+
+</div>
