@@ -1,5 +1,32 @@
 <app-navbar></app-navbar>
 <div class="content">
   <h2>Bienvenido al Dashboard</h2>
-  <!-- Aquí puedes poner info general o simplemente dejarlo vacío por ahora -->
+
+  <div class="dashboard-grid">
+    <!-- Sección de Waypoints -->
+    <div class="dashboard-card" routerLink="/waypoints">
+      <h3>Tus Waypoints</h3>
+      <p>Administra tus ubicaciones importantes</p>
+    </div>
+
+    <!-- Sección de Favoritos -->
+    <div class="dashboard-card favorites-section">
+      <h3>Tus Recetas Favoritas</h3>
+
+      <div class="favorites-list">
+        <div class="favorite-item" *ngFor="let favorite of favorites">
+          <img [src]="getImage(favorite.recipe.output.name)"
+               [title]="favorite.recipe.name" />
+          <span class="favorite-name">{{ favorite.recipe.name }}</span>
+          <button class="delete-btn" (click)="deleteFavorite(favorite.id, $event)">
+            🗑️
+          </button>
+        </div>
+
+        <div *ngIf="favorites.length === 0" class="empty-message">
+          No tienes recetas favoritas aún
+        </div>
+      </div>
+    </div>
+  </div>
 </div>

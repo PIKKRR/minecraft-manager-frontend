@@ -1,0 +1,152 @@
+.page {
+  display: flex;
+  height: 100vh;
+  width: 100vw;
+  background-color: #004f4f;
+  color: white;
+  font-family: 'Segoe UI', sans-serif;
+}
+
+/* === Columna izquierda (lista de mundos) === */
+.worlds-column {
+  flex: 1;
+  padding: 2rem;
+  border-right: 2px solid #226666;
+  overflow-y: auto;
+}
+
+.world-item {
+  padding: 1rem;
+  margin-bottom: 1rem;
+  background-color: #1a1a1a;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.world-item:hover {
+  background-color: #2a2a2a;
+  transform: translateX(5px);
+}
+
+.world-item.active {
+  background-color: #288e70;
+  border-left: 4px solid #00ffcc;
+}
+
+.add-world-btn {
+  background-color: #288e70;
+  color: white;
+  padding: 0.5rem 1rem;
+  border: none;
+  border-radius: 4px;
+  margin-top: 1rem;
+  cursor: pointer;
+  width: 100%;
+}
+
+/* === Columna central (lista de waypoints) === */
+.waypoints-column {
+  flex: 1;
+  padding: 2rem;
+  overflow-y: auto;
+}
+
+.waypoint-item {
+  padding: 1rem;
+  margin-bottom: 1rem;
+  background-color: #1a1a1a;
+  border-radius: 4px;
+  display: flex;
+  justify-content: space-between;
+}
+
+.waypoint-coords {
+  font-family: monospace;
+  color: #00ffcc;
+}
+
+.waypoint-actions button {
+  background: none;
+  border: none;
+  color: #aaa;
+  cursor: pointer;
+  margin-left: 0.5rem;
+}
+
+.waypoint-actions button:hover {
+  color: white;
+}
+
+.add-waypoint-btn {
+  background-color: #288e70;
+  color: white;
+  padding: 0.5rem 1rem;
+  border: none;
+  border-radius: 4px;
+  margin-top: 1rem;
+  cursor: pointer;
+  width: 100%;
+}
+
+/* === Columna derecha (detalle/edición) === */
+.detail-column {
+  flex: 1;
+  padding: 2rem;
+  border-left: 2px solid #226666;
+}
+
+.waypoint-form {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+}
+
+.form-group label {
+  margin-bottom: 0.5rem;
+}
+
+.form-group input,
+.form-group textarea {
+  padding: 0.5rem;
+  border-radius: 4px;
+  border: 1px solid #444;
+  background-color: #333;
+  color: white;
+}
+
+.coords-group {
+  display: flex;
+  gap: 1rem;
+}
+
+.coords-group .form-group {
+  flex: 1;
+}
+
+.save-btn {
+  background-color: #00aa88;
+  color: white;
+  padding: 0.75rem;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-weight: bold;
+  margin-top: 1rem;
+}
+
+.delete-btn {
+  background-color: #aa0000;
+  color: white;
+  padding: 0.75rem;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-weight: bold;
+  margin-top: 1rem;
+}

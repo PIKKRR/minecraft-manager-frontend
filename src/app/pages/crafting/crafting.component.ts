@@ -5,6 +5,17 @@ import { HttpClient, HttpClientModule } from '@angular/common/http';
 import { debounceTime, switchMap } from 'rxjs/operators';
 import { NavbarComponent } from '../../components/navbar/navbar.component';
 
+interface FavoriteRecipe {
+  id: number;
+  recipe: {
+    id: number;
+    name: string;
+    output: {
+      name: string;
+    };
+  };
+}
+
 @Component({
   selector: 'app-crafting',
   standalone: true,
@@ -25,53 +36,79 @@ export class CraftingComponent implements OnInit {
   constructor(private http: HttpClient) {}
 
   ngOnInit(): void {
-  this.searchControl.valueChanges.pipe(
-    debounceTime(300),
-    switchMap(query => {
-      const token = localStorage.getItem('access');
-      return this.http.get<any[]>(
-        `http://localhost:8000/api/crafting/?search=${query}`,
-        {
-          headers: {
-            Authorization: `Bearer ${token}`
+    this.searchControl.valueChanges.pipe(
+      debounceTime(300),
+      switchMap(query => {
+        const token = localStorage.getItem('access');
+        return this.http.get<any[]>(
+          `http://localhost:8000/api/crafting/?search=${query}`,
+          {
+            headers: {
+              Authorization: `Bearer ${token}`
+            }
           }
-        }
-      );
-    })
-  ).subscribe(data => this.filteredRecipes = data);
-}
+        );
+      })
+    ).subscribe(data => {
+      this.filteredRecipes = data;
+    });
+  }
 
   selectRecipe(recipe: any) {
-  const token = localStorage.getItem('access');
-  this.http.get<any>(
-    `http://localhost:8000/api/crafting/${recipe.id}/`,
-    {
-      headers: {
-        Authorization: `Bearer ${token}`
+    const token = localStorage.getItem('access');
+    this.http.get<any>(
+      `http://localhost:8000/api/crafting/${recipe.id}/`,
+      {
+        headers: {
+          Authorization: `Bearer ${token}`
+        }
       }
-    }
-  ).subscribe(data => this.selectedRecipe = data);
-}
+    ).subscribe(data => {
+      this.selectedRecipe = data;
+    });
+  }
 
-    getImage(itemName: string): string {
+  getImage(itemName: string): string {
     if (!itemName) return '';
     return `/icons/${itemName}.png`;
   }
 
   addToFavorites() {
     const token = localStorage.getItem('access');
-    if (!token || !this.selectedRecipe) return;
+    if (!token) {
+      alert('Debes iniciar sesión para guardar favoritos');
+      return;
+    }
 
-    this.http.post(
+    if (!this.selectedRecipe?.id) {
+      console.error('No hay receta seleccionada');
+      return;
+    }
+
+    this.http.post<FavoriteRecipe>(
       'http://localhost:8000/api/crafting/favorites/',
       { recipe: this.selectedRecipe.id },
       {
         headers: {
-          Authorization: `Bearer ${token}`
+          'Authorization': `Bearer ${token}`,
+          'Content-Type': 'application/json'
         }
       }
-    ).subscribe(() => {
-      alert('Agregado a favoritos');
+    ).subscribe({
+      next: (response) => {
+        console.log('Favorito creado:', response);
+        alert('¡Receta añadida a favoritos!');
+      },
+      error: (err) => {
+        console.error('Error al guardar favorito:', err);
+        if (err.status === 400) {
+          alert(err.error || 'Esta receta ya está en tus favoritos');
+        } else if (err.status === 401) {
+          alert('Tu sesión ha expirado. Por favor inicia sesión nuevamente.');
+        } else {
+          alert('Error desconocido al guardar favorito');
+        }
+      }
     });
   }
 }

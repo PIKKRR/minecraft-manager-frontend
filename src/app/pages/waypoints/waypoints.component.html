@@ -1,0 +1,81 @@
+<app-navbar></app-navbar>
+<div class="page">
+  <!-- Columna izquierda: Lista de mundos -->
+  <div class="worlds-column">
+    <h2>Tus Mundos</h2>
+    <div *ngFor="let world of worlds"
+         class="world-item"
+         [class.active]="selectedWorld?.id === world.id"
+         (click)="selectWorld(world)">
+      {{ world.name }}
+    </div>
+    <button class="add-world-btn" (click)="showAddWorldForm()">+ Añadir Mundo</button>
+
+    <!-- Formulario para añadir mundo -->
+    <div *ngIf="isAddingWorld" class="world-form">
+      <input [(ngModel)]="newWorldName" placeholder="Nombre del mundo" />
+      <button (click)="addWorld()">Guardar</button>
+      <button (click)="cancelAddWorld()">Cancelar</button>
+    </div>
+  </div>
+
+  <!-- Columna central: Lista de waypoints -->
+  <div class="waypoints-column" *ngIf="selectedWorld">
+    <h2>Waypoints en {{ selectedWorld.name }}</h2>
+    <div *ngFor="let waypoint of waypoints" class="waypoint-item">
+      <div>
+        <h3>{{ waypoint.name }}</h3>
+        <div class="waypoint-coords">X: {{ waypoint.x }} Y: {{ waypoint.y }} Z: {{ waypoint.z }}</div>
+        <p *ngIf="waypoint.notes">{{ waypoint.notes }}</p>
+      </div>
+      <div class="waypoint-actions">
+        <button (click)="editWaypoint(waypoint)">✏️</button>
+        <button (click)="waypoint.id && deleteWaypoint(waypoint.id)">🗑️</button>
+      </div>
+    </div>
+    <button class="add-waypoint-btn" (click)="showAddWaypointForm()">+ Añadir Waypoint</button>
+  </div>
+
+  <!-- Columna derecha: Detalle/Edición -->
+  <div class="detail-column" *ngIf="selectedWorld">
+    <div *ngIf="isAddingWaypoint || selectedWaypoint">
+      <h2>{{ selectedWaypoint ? 'Editar Waypoint' : 'Añadir Waypoint' }}</h2>
+      <form class="waypoint-form" (ngSubmit)="saveWaypoint()">
+        <div class="form-group">
+          <label>Nombre:</label>
+          <input [(ngModel)]="currentWaypoint.name" name="name" required />
+        </div>
+
+        <div class="coords-group">
+          <div class="form-group">
+            <label>Coordenada X:</label>
+            <input type="number" [(ngModel)]="currentWaypoint.x" name="x" step="0.01" required />
+          </div>
+          <div class="form-group">
+            <label>Coordenada Y:</label>
+            <input type="number" [(ngModel)]="currentWaypoint.y" name="y" step="0.01" required />
+          </div>
+          <div class="form-group">
+            <label>Coordenada Z:</label>
+            <input type="number" [(ngModel)]="currentWaypoint.z" name="z" step="0.01" required />
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label>Observaciones:</label>
+          <textarea [(ngModel)]="currentWaypoint.notes" name="notes" rows="4"></textarea>
+        </div>
+
+        <button type="submit" class="save-btn">Guardar</button>
+        <button *ngIf="selectedWaypoint" type="button" class="delete-btn" (click)="deleteWaypoint(selectedWaypoint.id)">
+          Eliminar
+        </button>
+      </form>
+    </div>
+
+    <div *ngIf="!isAddingWaypoint && !selectedWaypoint">
+      <h2>Selecciona un waypoint para editar</h2>
+      <p>O crea uno nuevo haciendo clic en "Añadir Waypoint"</p>
+    </div>
+  </div>
+</div>
