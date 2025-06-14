@@ -13,6 +13,8 @@ interface Recipe {
   id: number;
   name: string;
   output?: RecipeOutput;
+  // Aquí agregamos el grid, un array de 9 posiciones con items o null
+  grid: ( { name: string } | null )[];
 }
 
 interface Favorite {
@@ -36,6 +38,10 @@ export class DashboardComponent implements OnInit {
   isLoading = true;
   apiUrl = 'http://localhost:8000';
 
+  // Tooltip control
+  tooltipVisible = false;
+  tooltipRecipe: Recipe | null = null;
+
   constructor(
     private http: HttpClient,
     private notificationService: NotificationService
@@ -46,46 +52,50 @@ export class DashboardComponent implements OnInit {
   }
 
   loadFavorites(): void {
-  const token = localStorage.getItem('access');
-  this.http.get<any>(`http://localhost:8000/api/crafting/favorites/`, {
-    headers: { Authorization: `Bearer ${token}` }
-  }).subscribe({
-    next: (response) => {
-      console.log('Respuesta de favoritos:', response);
-      this.favorites = response;  // Asegúrate que response contiene los datos esperados
-      this.isLoading = false;
-    },
-    error: (err) => {
-      console.error('Error completo:', err);
-      this.notificationService.showError('Error al cargar favoritos');
-      this.isLoading = false;
-    }
-  });
-}
+    const token = localStorage.getItem('access');
+    this.http.get<Favorite[]>(`${this.apiUrl}/api/crafting/favorites/`, {
+      headers: { Authorization: `Bearer ${token}` }
+    }).subscribe({
+      next: (response) => {
+        console.log('Respuesta de favoritos:', response);
+        this.favorites = response.map(fav => {
+          // Si la receta no tiene grid, por ejemplo por backend, crea un grid vacío para evitar errores
+          if (!fav.recipe.grid || fav.recipe.grid.length !== 9) {
+            fav.recipe.grid = Array(9).fill(null);
+          }
+          return fav;
+        });
+        this.isLoading = false;
+      },
+      error: (err) => {
+        console.error('Error completo:', err);
+        this.notificationService.showError('Error al cargar favoritos');
+        this.isLoading = false;
+      }
+    });
+  }
 
   getImage(itemName: string | undefined): string {
-  if (!itemName || itemName.trim() === '') {
-    return '/icons/default-item.png';
+    if (!itemName || itemName.trim() === '') {
+      return '/icons/default-item.png';
+    }
+
+    const safeName = itemName
+  .toLowerCase()
+  .normalize("NFD")
+  .replace(/[\u0300-\u036f]/g, '')
+  .replace(/\s+/g, '-')
+  .replace(/[^a-z0-9\-_]/g, '');
+
+    return `/icons/${safeName}.png`;
   }
-
-  const safeName = itemName
-    .toLowerCase()
-    .normalize("NFD")               // Quita tildes
-    .replace(/[\u0300-\u036f]/g, '') // Quita acentos
-    .replace(/\s+/g, '-')            // Espacios por guiones
-    .replace(/[^a-z0-9\-]/g, '');    // Elimina caracteres no válidos
-
-  return `/icons/${safeName}.png`;
-}
-
 
   handleImageError(event: Event): void {
-  const imgElement = event.target as HTMLImageElement;
-  if (!imgElement.src.endsWith('default-item.png')) {
-    imgElement.src = '/icons/default-item.png';
+    const imgElement = event.target as HTMLImageElement;
+    if (!imgElement.src.endsWith('default-item.png')) {
+      imgElement.src = '/icons/default-item.png';
+    }
   }
-}
-
 
   deleteFavorite(favoriteId: number, event: Event): void {
     event.stopPropagation();
@@ -106,5 +116,15 @@ export class DashboardComponent implements OnInit {
         this.notificationService.showError('Error al eliminar favorito');
       }
     });
+  }
+
+  showTooltip(recipe: Recipe): void {
+    this.tooltipRecipe = recipe;
+    this.tooltipVisible = true;
+  }
+
+  hideTooltip(): void {
+    this.tooltipVisible = false;
+    this.tooltipRecipe = null;
   }
 }

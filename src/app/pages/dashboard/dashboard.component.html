@@ -30,7 +30,17 @@
             </div>
 
             <div *ngIf="!isLoading">
-              <div class="favorite-item" *ngFor="let favorite of favorites">
+              <div *ngIf="favorites.length === 0" class="empty-message">
+                <div class="empty-icon">📭</div>
+                <p>No tienes recetas favoritas aún</p>
+                <small>Agrega algunas desde el libro de recetas</small>
+              </div>
+
+              <div class="favorite-item" *ngFor="let favorite of favorites"
+                   (mouseenter)="showTooltip(favorite.recipe)"
+                   (mouseleave)="hideTooltip()"
+                   style="position: relative;">
+
                 <img [src]="getImage(favorite.recipe.output ? favorite.recipe.output.name : undefined)"
                      [alt]="favorite.recipe.name"
                      (error)="handleImageError($event)"/>
@@ -40,12 +50,20 @@
                         title="Eliminar favorito">
                   <i class="delete-icon">×</i>
                 </button>
-              </div>
 
-              <div *ngIf="favorites.length === 0" class="empty-message">
-                <div class="empty-icon">📭</div>
-                <p>No tienes recetas favoritas aún</p>
-                <small>Agrega algunas desde el libro de recetas</small>
+                <!-- Tooltip: aparece solo para el favorito activo -->
+                <div class="tooltip" *ngIf="tooltipVisible && tooltipRecipe?.id === favorite.recipe.id">
+                  <div class="crafting-grid">
+                    <div class="grid-cell" *ngFor="let cell of tooltipRecipe?.grid">
+                      <img *ngIf="cell" [src]="getImage(cell.name)" [alt]="cell.name"/>
+                    </div>
+                  </div>
+                  <div class="arrow">→</div>
+                  <div class="output-item">
+                    <img [src]="getImage(tooltipRecipe?.output?.name)" [alt]="tooltipRecipe?.output?.name"/>
+                  </div>
+                </div>
+
               </div>
             </div>
           </div>
