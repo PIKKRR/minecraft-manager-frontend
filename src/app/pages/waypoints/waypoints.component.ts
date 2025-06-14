@@ -231,12 +231,12 @@ export class WaypointsComponent implements OnInit {
 
     const request = this.selectedWaypoint
       ? this.http.put<Waypoint>(
-          `http://localhost:8000/api/waypoints/waypoints/${this.selectedWaypoint.id}/`,
+          `http://localhost:8000/api/waypoints/${this.selectedWaypoint.id}/`,
           waypointData,
           { headers: { Authorization: `Bearer ${token}` } }
         )
       : this.http.post<Waypoint>(
-          'http://localhost:8000/api/waypoints/waypoints/',
+          'http://localhost:8000/api/waypoints/',
           waypointData,
           { headers: { Authorization: `Bearer ${token}` } }
         );
@@ -281,7 +281,7 @@ export class WaypointsComponent implements OnInit {
     if (!confirm('¿Estás seguro de que quieres eliminar este waypoint?')) return;
 
     const token = localStorage.getItem('access');
-    this.http.delete(`http://localhost:8000/api/waypoints/waypoints/${waypointId}/`, {
+    this.http.delete(`http://localhost:8000/api/waypoints/${waypointId}/`, {
       headers: { Authorization: `Bearer ${token}` }
     }).subscribe({
       next: () => {

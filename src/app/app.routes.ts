@@ -4,6 +4,7 @@ import { CraftingComponent } from './pages/crafting/crafting.component';
 import { DashboardComponent } from './pages/dashboard/dashboard.component';
 import { WaypointsComponent } from './pages/waypoints/waypoints.component';
 import { AuthGuard } from './auth-guard';
+import { AccountComponent } from './pages/account/account.component';
 
 export const routes: Routes = [
   { path: '', component: HomeComponent },
@@ -14,5 +15,6 @@ export const routes: Routes = [
   loadComponent: () => import('./pages/waypoints/waypoints.component').then(m => m.WaypointsComponent),
   canActivate: [AuthGuard]
   },
+  { path: 'account', component: AccountComponent},
   { path: '**', redirectTo: '' }
 ];

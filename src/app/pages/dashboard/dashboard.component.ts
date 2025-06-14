@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { HttpClient } from '@angular/common/http';
 import { NavbarComponent } from '../../components/navbar/navbar.component';
 import { NotificationService } from '../../services/notification.service';
+import { NotificationComponent } from '../../components/notifications/notification.component';
 import { RouterModule } from '@angular/router';
 
 interface RecipeOutput {
@@ -22,18 +23,30 @@ interface Favorite {
   recipe: Recipe;
 }
 
+interface Waypoint {
+  id: number;
+  name: string;
+  x: number;
+  y: number;
+  z: number;
+  notes?: string;
+  created_at: string;
+}
+
 @Component({
   selector: 'app-dashboard',
   standalone: true,
   imports: [
     CommonModule,
     NavbarComponent,
-    RouterModule
+    RouterModule,
+    NotificationComponent,
   ],
   templateUrl: './dashboard.component.html',
   styleUrls: ['./dashboard.component.css']
 })
 export class DashboardComponent implements OnInit {
+  recentWaypoints: Waypoint[] = [];
   favorites: Favorite[] = [];
   isLoading = true;
   apiUrl = 'http://localhost:8000';
@@ -49,6 +62,29 @@ export class DashboardComponent implements OnInit {
 
   ngOnInit(): void {
     this.loadFavorites();
+    this.loadRecentWaypoints();
+  }
+
+  getName(cell: { name: string } | string | null): string {
+      if(!cell) return '';
+      if (typeof cell == 'string') return cell;
+      if (typeof cell == 'object' && 'name' in cell) return cell.name;
+      return'';
+    }
+
+  loadRecentWaypoints(): void {
+    const token = localStorage.getItem('access');
+    this.http.get<Waypoint[]>(`${this.apiUrl}/api/waypoints/recent/`, {
+      headers: { Authorization: `Bearer ${token}` }
+    }).subscribe({
+      next: (response) => {
+        this.recentWaypoints = response;
+      },
+      error: (err) => {
+        console.error('Error al cargar waypoints recientes:', err);
+        this.notificationService.showError('Error al cargar waypoints recientes');
+      }
+    });
   }
 
   loadFavorites(): void {

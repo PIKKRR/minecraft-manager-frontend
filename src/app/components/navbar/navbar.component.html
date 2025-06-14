@@ -1,7 +1,13 @@
 <nav class="navbar">
-  <ul class="nav-links">
-    <li><a routerLink="/dashboard">🏠 Dashboard</a></li>
-    <li><a routerLink="/crafting">🛠️ Crafting</a></li>
-    <li><a (click)="logout()">🚪 Cerrar sesión</a></li>
-  </ul>
+  <div class="navbar-left">
+    <a routerLink="/dashboard" class="logo">MC Manager</a>
+    <ul class="nav-links">
+      <li><a routerLink="/dashboard" routerLinkActive="active" [routerLinkActiveOptions]="{exact:true}">🏠 Dashboard</a></li>
+      <li><a routerLink="/crafting" routerLinkActive="active">🛠️ Crafting</a></li>
+      <li><a routerLink="/waypoints" routerLinkActive="active">📍 Waypoints</a></li>
+    </ul>
+  </div>
+  <div class="navbar-right">
+    <app-user-dropdown-panel></app-user-dropdown-panel>
+  </div>
 </nav>

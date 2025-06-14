@@ -1,46 +1,96 @@
+/* Reset básico */
+* {
+  box-sizing: border-box;
+}
+
 .navbar {
   position: fixed;
   top: 0;
   left: 0;
   width: 100%;
-  z-index: 1000;
-  background-color: #1f1f1f;
-  padding: 10px 20px;
+  background: #222;
+  color: white;
   display: flex;
-  justify-content: center;
-  border-bottom: 2px solid #333;
-  box-sizing: border-box; /* Asegura que el padding no afecte el ancho total */
+  justify-content: space-between;
+  align-items: center;
+  padding: 0 1.5rem;
+  height: 60px;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  z-index: 1000;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.3);
 }
 
+/* Logo */
+.logo {
+  font-weight: 700;
+  font-size: 1.4rem;
+  color: #4CAF50;
+  text-decoration: none;
+  user-select: none;
+  transition: color 0.3s ease;
+}
+
+.logo:hover {
+  color: #76d275;
+}
+
+/* Contenedor de links */
+.navbar-left {
+  display: flex;
+  align-items: center;
+  gap: 2rem;
+}
+
+/* Lista de enlaces */
 .nav-links {
   list-style: none;
   display: flex;
-  gap: 20px;
+  gap: 1.8rem;
   margin: 0;
   padding: 0;
-  align-items: center;
-  height: 100%;
 }
 
 .nav-links li a {
-  color: #fff;
+  color: white;
   text-decoration: none;
-  font-weight: bold;
-  font-size: 16px;
-  display: flex;
-  align-items: center;
-  gap: 5px;
-  transition: all 0.3s ease;
+  font-weight: 600;
+  font-size: 1rem;
+  padding: 0.3rem 0;
+  position: relative;
+  transition: color 0.3s ease;
+}
+
+.nav-links li a::after {
+  content: '';
+  position: absolute;
+  width: 0%;
+  height: 2px;
+  bottom: 0;
+  left: 0;
+  background-color: #4CAF50;
+  transition: width 0.3s ease;
 }
 
 .nav-links li a:hover {
-  color: #4CAF50; /* Cambia el color al pasar el mouse */
-  text-decoration: none;
+  color: #76d275;
 }
 
-/* Estilo para el enlace activo */
-.nav-links li a.router-link-active {
-  color: #4CAF50;
-  border-bottom: 2px solid #4CAF50;
-  padding-bottom: 2px;
+.nav-links li a:hover::after,
+.nav-links li a.router-link-active::after {
+  width: 100%;
+}
+
+/* Zona usuario */
+.navbar-right {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  position: relative;
+}
+
+/* Responsive */
+@media (max-width: 600px) {
+  .nav-links {
+    display: none; /* Para hacer un menú hamburguesa luego */
+  }
 }

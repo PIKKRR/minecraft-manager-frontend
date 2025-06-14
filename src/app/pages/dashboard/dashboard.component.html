@@ -1,4 +1,6 @@
 <app-navbar></app-navbar>
+<app-notification></app-notification>
+
 <div class="page">
   <div class="dashboard-container">
     <div class="dashboard-header">
@@ -7,13 +9,26 @@
     </div>
 
     <div class="dashboard-cards">
-      <!-- Tarjeta de Waypoints -->
-      <div class="dashboard-card waypoints-card" routerLink="/waypoints">
-        <div class="card-icon">📍</div>
+
+      <!-- Tarjeta de Recent Waypoints -->
+      <div class="dashboard-card recent-waypoints-card">
+        <div class="card-icon">🕒</div>
         <div class="card-content">
-          <h3>Tus Waypoints</h3>
-          <p>Administra tus ubicaciones importantes en el mundo</p>
-          <div class="card-hover-effect">Ver todos →</div>
+          <h3>Waypoints Recientes</h3>
+
+          <div *ngIf="recentWaypoints.length === 0">
+            <p>No has creado waypoints todavía.</p>
+          </div>
+
+          <ul class="recent-list" *ngIf="recentWaypoints.length > 0">
+            <li *ngFor="let wp of recentWaypoints">
+              <strong>{{ wp.name }}</strong> – ({{ wp.x }}, {{ wp.y }}, {{ wp.z }})
+            </li>
+          </ul>
+
+          <div class="card-hover-effect" routerLink="/waypoints">
+            Ver todos →
+          </div>
         </div>
       </div>
 
@@ -55,7 +70,7 @@
                 <div class="tooltip" *ngIf="tooltipVisible && tooltipRecipe?.id === favorite.recipe.id">
                   <div class="crafting-grid">
                     <div class="grid-cell" *ngFor="let cell of tooltipRecipe?.grid">
-                      <img *ngIf="cell" [src]="getImage(cell.name)" [alt]="cell.name"/>
+                      <img *ngIf="cell" [src]="getImage(getName(cell))" [alt]="getName(cell)"/>
                     </div>
                   </div>
                   <div class="arrow">→</div>

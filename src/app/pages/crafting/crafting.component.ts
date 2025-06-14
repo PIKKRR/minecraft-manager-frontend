@@ -4,6 +4,8 @@ import { FormControl, ReactiveFormsModule } from '@angular/forms';
 import { HttpClient, HttpClientModule } from '@angular/common/http';
 import { debounceTime, switchMap, startWith } from 'rxjs/operators';
 import { NavbarComponent } from '../../components/navbar/navbar.component';
+import { NotificationService } from '../../services/notification.service';
+import { NotificationComponent } from '../../components/notifications/notification.component';
 
 interface FavoriteRecipe {
   id: number;
@@ -24,6 +26,7 @@ interface FavoriteRecipe {
     ReactiveFormsModule,
     HttpClientModule,
     NavbarComponent,
+    NotificationComponent,
   ],
   templateUrl: './crafting.component.html',
   styleUrls: ['./crafting.component.css']
@@ -34,7 +37,10 @@ export class CraftingComponent implements OnInit {
   selectedRecipe?: any;
   isLoading = true;
 
-  constructor(private http: HttpClient) {}
+  constructor(
+    private http: HttpClient,
+    private notificationService: NotificationService
+    ) {}
 
   ngOnInit(): void {
     // Cargar todas las recetas al inicio
@@ -88,6 +94,7 @@ export class CraftingComponent implements OnInit {
 
   addToFavorites() {
   if (!this.selectedRecipe?.id) {
+    this.notificationService.showError('No hay receta seleccionada');
     console.error('No hay receta seleccionada');
     return;
   }
@@ -114,7 +121,7 @@ export class CraftingComponent implements OnInit {
   ).subscribe({
     next: (response) => {
       console.log('Favorito creado:', response);
-      alert('¡Receta añadida a favoritos!');
+      this.notificationService.showSuccess('¡Receta agregada a favoritos!');
     },
     error: (err) => {
       console.error('Error completo:', err);

@@ -1,0 +1,17 @@
+<div class="dropdown-container">
+  <button class="avatar-btn" (click)="toggleDropdown()" aria-label="Toggle user menu">
+    <img src="/icons/user-icon.png" alt="User Avatar" class="avatar-img" />
+  </button>
+
+  <div class="dropdown-menu" *ngIf="dropdownOpen">
+    <div class="profile-info">
+      <p><strong>{{ profileData.name }}</strong></p>
+      <p>{{ profileData.email }}</p>
+    </div>
+
+    <nav class="dropdown-links">
+      <a routerLink="/account" (click)="dropdownOpen = false" class="dropdown-link">Mi cuenta</a>
+      <button (click)="logout()" class="dropdown-logout">Logout</button>
+    </nav>
+  </div>
+</div>

@@ -1,0 +1,35 @@
+<app-navbar></app-navbar>
+<app-notification></app-notification>
+
+
+<div class="account-container">
+  <h2>Mi cuenta</h2>
+
+  <div class="profile-info">
+    <p><strong>Nombre:</strong> {{ profileData.username }}</p>
+    <p><strong>Email:</strong> {{ profileData.email }}</p>
+    <p><strong>Contraseña:</strong> ********</p>
+  </div>
+
+  <form [formGroup]="passwordForm" (ngSubmit)="changePassword()" class="password-form">
+    <label>
+      Contraseña actual
+      <input type="password" formControlName="old_password" autocomplete="current-password" />
+    </label>
+
+    <label>
+      Nueva contraseña
+      <input type="password" formControlName="new_password" autocomplete="new-password" />
+    </label>
+
+    <label>
+      Confirmar nueva contraseña
+      <input type="password" formControlName="confirm_password" autocomplete="new-password" />
+      <small *ngIf="passwordForm.errors?.['notMatching']" style="color:red;">
+        Las contraseñas no coinciden
+      </small>
+    </label>
+
+    <button type="submit">Cambiar contraseña</button>
+  </form>
+</div>
