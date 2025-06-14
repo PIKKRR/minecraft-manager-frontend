@@ -1,50 +1,209 @@
-.dashboard-grid {
+/* Estilos generales */
+.dashboard-container {
+  padding: 2rem;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.dashboard-header {
+  text-align: center;
+  margin-bottom: 2rem;
+}
+
+.dashboard-header h2 {
+  font-size: 2.5rem;
+  margin-bottom: 0.5rem;
+  color: #00ffcc;
+  text-shadow: 0 0 10px rgba(0, 255, 204, 0.3);
+}
+
+.subtitle {
+  color: #aaa;
+  font-size: 1.1rem;
+}
+
+.dashboard-cards {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-  gap: 1.5rem;
-  margin-top: 2rem;
+  grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+  gap: 2rem;
 }
 
-.favorites-section {
-  min-height: 300px;
+/* Tarjetas */
+.dashboard-card {
+  background-color: rgba(26, 26, 26, 0.8);
+  border-radius: 10px;
+  padding: 1.5rem;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+  border: 1px solid #226666;
+  position: relative;
+  overflow: hidden;
 }
 
+.dashboard-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.4);
+  border-color: #00ffcc;
+}
+
+.waypoints-card {
+  cursor: pointer;
+  position: relative;
+}
+
+.waypoints-card::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 4px;
+  background: linear-gradient(90deg, #00ffcc, #288e70);
+}
+
+.favorites-card::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 4px;
+  background: linear-gradient(90deg, #ff3366, #aa0000);
+}
+
+.card-icon {
+  font-size: 2.5rem;
+  margin-bottom: 1rem;
+}
+
+.card-content h3 {
+  font-size: 1.5rem;
+  margin-bottom: 0.5rem;
+  color: #00ffcc;
+}
+
+.card-content p {
+  color: #aaa;
+  margin-bottom: 1.5rem;
+}
+
+.card-hover-effect {
+  color: #00ffcc;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  font-weight: bold;
+}
+
+.waypoints-card:hover .card-hover-effect {
+  opacity: 1;
+}
+
+/* Lista de favoritos */
 .favorites-list {
+  margin-top: 1.5rem;
+}
+
+.loading-message {
   display: flex;
-  flex-direction: column;
-  gap: 0.8rem;
-  margin-top: 1rem;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem;
+  color: #aaa;
+}
+
+.spinner {
+  width: 20px;
+  height: 20px;
+  border: 3px solid rgba(0, 255, 204, 0.3);
+  border-radius: 50%;
+  border-top-color: #00ffcc;
+  animation: spin 1s ease-in-out infinite;
+  margin-right: 10px;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
 }
 
 .favorite-item {
   display: flex;
   align-items: center;
-  gap: 1rem;
-  padding: 0.5rem;
-  background-color: rgba(255, 255, 255, 0.05);
-  border-radius: 4px;
+  padding: 0.8rem;
+  margin-bottom: 0.8rem;
+  background-color: rgba(40, 142, 112, 0.1);
+  border-radius: 6px;
+  transition: all 0.2s ease;
 }
 
-.favorite-item img {
-  width: 40px;
-  height: 40px;
+.favorite-item:hover {
+  background-color: rgba(40, 142, 112, 0.2);
+}
+
+.item-image {
+  width: 30px;
+  height: 30px;
+  margin-right: 1rem;
   object-fit: contain;
 }
 
 .favorite-name {
   flex-grow: 1;
+  color: #eee;
 }
 
 .delete-btn {
   background: none;
   border: none;
-  color: #ff6b6b;
+  color: #ff6666;
   cursor: pointer;
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s ease;
+}
+
+.delete-btn:hover {
+  background-color: rgba(170, 0, 0, 0.2);
+  color: #ff0000;
+  transform: scale(1.1);
+}
+
+.delete-icon {
   font-size: 1.2rem;
+  font-weight: bold;
 }
 
 .empty-message {
-  color: rgba(255, 255, 255, 0.5);
   text-align: center;
-  margin-top: 1rem;
+  padding: 2rem;
+  color: #aaa;
+}
+
+.empty-icon {
+  font-size: 2.5rem;
+  margin-bottom: 1rem;
+  opacity: 0.7;
+}
+
+.empty-message p {
+  margin-bottom: 0.5rem;
+  color: #eee;
+}
+
+.empty-message small {
+  font-size: 0.9rem;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .dashboard-cards {
+    grid-template-columns: 1fr;
+  }
+
+  .dashboard-header h2 {
+    font-size: 2rem;
+  }
 }

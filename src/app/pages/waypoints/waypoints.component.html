@@ -4,12 +4,17 @@
 <div class="page">
   <!-- Columna izquierda: Lista de mundos -->
   <div class="worlds-column">
-    <h2>Tus Mundos</h2>
-    <div *ngFor="let world of worlds"
-         class="world-item"
-         [class.active]="selectedWorld?.id === world.id"
-         (click)="selectWorld(world)">
-      {{ world.name }}
+    <h2>Mis Mundos</h2>
+    <div *ngFor="let world of worlds" class="world-item-container">
+      <div class="world-item"
+           [class.active]="selectedWorld?.id === world.id"
+           (click)="selectWorld(world)">
+        {{ world.name }}
+      </div>
+      <div class="world-actions">
+        <button (click)="editWorld(world); $event.stopPropagation()">✏️</button>
+        <button (click)="deleteWorld(world.id); $event.stopPropagation()">🗑️</button>
+      </div>
     </div>
     <button class="add-world-btn" (click)="showAddWorldForm()">+ Añadir Mundo</button>
 
@@ -18,6 +23,14 @@
       <input [(ngModel)]="newWorldName" placeholder="Nombre del mundo" />
       <button (click)="addWorld()">Guardar</button>
       <button (click)="cancelAddWorld()">Cancelar</button>
+    </div>
+
+    <!-- Formulario para editar mundo -->
+    <div *ngIf="isEditingWorld" class="world-form">
+      <h3>Editar Mundo</h3>
+      <input [(ngModel)]="editingWorldName" placeholder="Nombre del mundo" />
+      <button (click)="updateWorld()">Guardar</button>
+      <button (click)="cancelEditWorld()">Cancelar</button>
     </div>
   </div>
 

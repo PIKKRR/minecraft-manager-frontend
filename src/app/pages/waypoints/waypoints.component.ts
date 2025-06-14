@@ -42,8 +42,11 @@ export class WaypointsComponent implements OnInit {
   selectedWaypoint: Waypoint | null = null;
 
   isAddingWorld = false;
+  isEditingWorld = false;
   isAddingWaypoint = false;
   newWorldName = '';
+  editingWorld: World | null = null;
+  editingWorldName = '';
 
   currentWaypoint: Waypoint = {
     name: '',
@@ -55,7 +58,7 @@ export class WaypointsComponent implements OnInit {
 
   constructor(
     private http: HttpClient,
-    private notificationService: NotificationService // Añade el servicio aquí
+    private notificationService: NotificationService
   ) {}
 
   ngOnInit(): void {
@@ -102,6 +105,7 @@ export class WaypointsComponent implements OnInit {
   showAddWorldForm(): void {
     this.isAddingWorld = true;
     this.newWorldName = '';
+    this.isEditingWorld = false;
   }
 
   cancelAddWorld(): void {
@@ -125,6 +129,72 @@ export class WaypointsComponent implements OnInit {
       error: (err) => {
         console.error('Error adding world:', err);
         this.notificationService.showError('Error al crear el mundo');
+      }
+    });
+  }
+
+  editWorld(world: World): void {
+    this.editingWorld = world;
+    this.editingWorldName = world.name;
+    this.isEditingWorld = true;
+    this.isAddingWorld = false;
+  }
+
+  cancelEditWorld(): void {
+    this.isEditingWorld = false;
+    this.editingWorld = null;
+  }
+
+  updateWorld(): void {
+    if (!this.editingWorld || !this.editingWorldName.trim()) return;
+
+    const token = localStorage.getItem('access');
+    this.http.put<World>(
+      `http://localhost:8000/api/waypoints/worlds/${this.editingWorld.id}/`,
+      { name: this.editingWorldName },
+      { headers: { Authorization: `Bearer ${token}` } }
+    ).subscribe({
+      next: (updatedWorld) => {
+        const index = this.worlds.findIndex(w => w.id === updatedWorld.id);
+        if (index !== -1) {
+          this.worlds[index] = updatedWorld;
+          if (this.selectedWorld?.id === updatedWorld.id) {
+            this.selectedWorld = updatedWorld;
+          }
+        }
+        this.isEditingWorld = false;
+        this.editingWorld = null;
+        this.notificationService.showSuccess('Mundo actualizado correctamente');
+      },
+      error: (err) => {
+        console.error('Error updating world:', err);
+        this.notificationService.showError('Error al actualizar el mundo');
+      }
+    });
+  }
+
+  deleteWorld(worldId: number): void {
+    if (!confirm('¿Estás seguro de que quieres eliminar este mundo y todos sus waypoints?')) return;
+
+    const token = localStorage.getItem('access');
+    this.http.delete(`http://localhost:8000/api/waypoints/worlds/${worldId}/`, {
+      headers: { Authorization: `Bearer ${token}` }
+    }).subscribe({
+      next: () => {
+        this.worlds = this.worlds.filter(w => w.id !== worldId);
+        if (this.selectedWorld?.id === worldId) {
+          this.selectedWorld = this.worlds.length > 0 ? this.worlds[0] : null;
+          if (this.selectedWorld) {
+            this.loadWaypoints(this.selectedWorld.id);
+          } else {
+            this.waypoints = [];
+          }
+        }
+        this.notificationService.showSuccess('Mundo eliminado correctamente');
+      },
+      error: (err) => {
+        console.error('Error deleting world:', err);
+        this.notificationService.showError('Error al eliminar el mundo');
       }
     });
   }

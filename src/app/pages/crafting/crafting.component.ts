@@ -54,6 +54,7 @@ export class CraftingComponent implements OnInit {
   }
 
   loadAllRecipes() {
+    const token = localStorage.getItem('access');
     this.isLoading = true;
     this.http.get<any[]>(
       'http://localhost:8000/api/crafting/',
@@ -71,6 +72,7 @@ export class CraftingComponent implements OnInit {
   }
 
   selectRecipe(recipe: any) {
+    const token = localStorage.getItem('access');
     this.http.get<any>(
       `http://localhost:8000/api/crafting/${recipe.id}/`,
       this.getAuthHeaders()
@@ -85,32 +87,51 @@ export class CraftingComponent implements OnInit {
   }
 
   addToFavorites() {
-    if (!this.selectedRecipe?.id) {
-      console.error('No hay receta seleccionada');
-      return;
-    }
-
-    this.http.post<FavoriteRecipe>(
-      'http://localhost:8000/api/crafting/favorites/',
-      { recipe: this.selectedRecipe.id },
-      this.getAuthHeaders()
-    ).subscribe({
-      next: (response) => {
-        console.log('Favorito creado:', response);
-        alert('¡Receta añadida a favoritos!');
-      },
-      error: (err) => {
-        console.error('Error al guardar favorito:', err);
-        if (err.status === 400) {
-          alert(err.error || 'Esta receta ya está en tus favoritos');
-        } else if (err.status === 401) {
-          alert('Tu sesión ha expirado. Por favor inicia sesión nuevamente.');
-        } else {
-          alert('Error desconocido al guardar favorito');
-        }
-      }
-    });
+  if (!this.selectedRecipe?.id) {
+    console.error('No hay receta seleccionada');
+    return;
   }
+
+  const token = localStorage.getItem('access');
+  if (!token) {
+    alert('No estás autenticado. Por favor inicia sesión.');
+    return;
+  }
+
+  const favoriteData = {
+    recipe_id: this.selectedRecipe.id
+  };
+
+  this.http.post<FavoriteRecipe>(
+    'http://localhost:8000/api/crafting/favorites/',
+    favoriteData,
+    {
+      headers: {
+        'Authorization': `Bearer ${token}`,
+        'Content-Type': 'application/json'
+      }
+    }
+  ).subscribe({
+    next: (response) => {
+      console.log('Favorito creado:', response);
+      alert('¡Receta añadida a favoritos!');
+    },
+    error: (err) => {
+      console.error('Error completo:', err);
+      if (err.status === 400) {
+        // Mostrar el mensaje de error específico del backend
+        const errorMsg = err.error?.detail ||
+                         err.error?.message ||
+                         'Esta receta ya está en tus favoritos o los datos son inválidos';
+        alert(errorMsg);
+      } else if (err.status === 401) {
+        alert('Tu sesión ha expirado. Por favor inicia sesión nuevamente.');
+      } else {
+        alert(`Error al guardar favorito: ${err.statusText}`);
+      }
+    }
+  });
+}
 
   private getAuthHeaders() {
     const token = localStorage.getItem('access');

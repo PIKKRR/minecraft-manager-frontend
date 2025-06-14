@@ -1,30 +1,54 @@
 <app-navbar></app-navbar>
-<div class="content">
-  <h2>Bienvenido al Dashboard</h2>
-
-  <div class="dashboard-grid">
-    <!-- Sección de Waypoints -->
-    <div class="dashboard-card" routerLink="/waypoints">
-      <h3>Tus Waypoints</h3>
-      <p>Administra tus ubicaciones importantes</p>
+<div class="page">
+  <div class="dashboard-container">
+    <div class="dashboard-header">
+      <h2>Bienvenido al Dashboard</h2>
+      <p class="subtitle">Administra tus waypoints y recetas favoritas</p>
     </div>
 
-    <!-- Sección de Favoritos -->
-    <div class="dashboard-card favorites-section">
-      <h3>Tus Recetas Favoritas</h3>
-
-      <div class="favorites-list">
-        <div class="favorite-item" *ngFor="let favorite of favorites">
-          <img [src]="getImage(favorite.recipe.output.name)"
-               [title]="favorite.recipe.name" />
-          <span class="favorite-name">{{ favorite.recipe.name }}</span>
-          <button class="delete-btn" (click)="deleteFavorite(favorite.id, $event)">
-            🗑️
-          </button>
+    <div class="dashboard-cards">
+      <!-- Tarjeta de Waypoints -->
+      <div class="dashboard-card waypoints-card" routerLink="/waypoints">
+        <div class="card-icon">📍</div>
+        <div class="card-content">
+          <h3>Tus Waypoints</h3>
+          <p>Administra tus ubicaciones importantes en el mundo</p>
+          <div class="card-hover-effect">Ver todos →</div>
         </div>
+      </div>
 
-        <div *ngIf="favorites.length === 0" class="empty-message">
-          No tienes recetas favoritas aún
+      <!-- Tarjeta de Favoritos -->
+      <div class="dashboard-card favorites-card">
+        <div class="card-icon">❤️</div>
+        <div class="card-content">
+          <h3>Tus Recetas Favoritas</h3>
+
+          <div class="favorites-list">
+            <div *ngIf="isLoading" class="loading-message">
+              <div class="spinner"></div>
+              <span>Cargando tus favoritos...</span>
+            </div>
+
+            <div *ngIf="!isLoading">
+              <div class="favorite-item" *ngFor="let favorite of favorites">
+                <img [src]="getImage(favorite.recipe.output ? favorite.recipe.output.name : undefined)"
+                     [alt]="favorite.recipe.name"
+                     (error)="handleImageError($event)"/>
+                <span class="favorite-name">{{ favorite.recipe.name }}</span>
+                <button class="delete-btn"
+                        (click)="deleteFavorite(favorite.id, $event)"
+                        title="Eliminar favorito">
+                  <i class="delete-icon">×</i>
+                </button>
+              </div>
+
+              <div *ngIf="favorites.length === 0" class="empty-message">
+                <div class="empty-icon">📭</div>
+                <p>No tienes recetas favoritas aún</p>
+                <small>Agrega algunas desde el libro de recetas</small>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
     </div>

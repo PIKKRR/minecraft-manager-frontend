@@ -4,6 +4,7 @@
   width: 100vw;
   background-color: #004f4f;
   color: white;
+  background: url("/background.png") no-repeat center center;
   font-family: 'Segoe UI', sans-serif;
 }
 
@@ -15,13 +16,19 @@
   overflow-y: auto;
 }
 
+.world-item-container {
+  display: flex;
+  margin-bottom: 1rem;
+  border-radius: 4px;
+  overflow: hidden;
+}
+
 .world-item {
   padding: 1rem;
-  margin-bottom: 1rem;
   background-color: #1a1a1a;
-  border-radius: 4px;
   cursor: pointer;
   transition: all 0.2s ease;
+  flex-grow: 1;
 }
 
 .world-item:hover {
@@ -34,6 +41,28 @@
   border-left: 4px solid #00ffcc;
 }
 
+.world-actions {
+  display: flex;
+  background-color: #1a1a1a;
+  align-items: center;
+  padding: 0 0.5rem;
+}
+
+.world-actions button {
+  background: none;
+  border: none;
+  color: #aaa;
+  cursor: pointer;
+  font-size: 1rem;
+  padding: 0.5rem;
+}
+
+.world-actions button:hover {
+  color: white;
+  background-color: #333;
+  border-radius: 4px;
+}
+
 .add-world-btn {
   background-color: #288e70;
   color: white;
@@ -43,6 +72,57 @@
   margin-top: 1rem;
   cursor: pointer;
   width: 100%;
+  transition: background-color 0.2s ease;
+}
+
+.add-world-btn:hover {
+  background-color: #1f7a5f;
+}
+
+.world-form {
+  padding: 1rem;
+  margin-top: 1rem;
+  background-color: #1a1a1a;
+  border-radius: 4px;
+}
+
+.world-form h3 {
+  margin-top: 0;
+  margin-bottom: 1rem;
+  color: #00ffcc;
+}
+
+.world-form input {
+  width: 100%;
+  padding: 0.5rem;
+  margin-bottom: 0.5rem;
+  border-radius: 4px;
+  border: 1px solid #444;
+  background-color: #333;
+  color: white;
+}
+
+.world-form button {
+  padding: 0.5rem 1rem;
+  margin-right: 0.5rem;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.world-form button:first-of-type {
+  background-color: #288e70;
+  color: white;
+}
+
+.world-form button:last-of-type {
+  background-color: #444;
+  color: white;
+}
+
+.world-form button:hover {
+  opacity: 0.9;
 }
 
 /* === Columna central (lista de waypoints) === */
@@ -72,6 +152,7 @@
   color: #aaa;
   cursor: pointer;
   margin-left: 0.5rem;
+  font-size: 1rem;
 }
 
 .waypoint-actions button:hover {
@@ -87,6 +168,11 @@
   margin-top: 1rem;
   cursor: pointer;
   width: 100%;
+  transition: background-color 0.2s ease;
+}
+
+.add-waypoint-btn:hover {
+  background-color: #1f7a5f;
 }
 
 /* === Columna derecha (detalle/edición) === */
@@ -138,6 +224,11 @@
   cursor: pointer;
   font-weight: bold;
   margin-top: 1rem;
+  transition: background-color 0.2s ease;
+}
+
+.save-btn:hover {
+  background-color: #008c6d;
 }
 
 .delete-btn {
@@ -149,4 +240,9 @@
   cursor: pointer;
   font-weight: bold;
   margin-top: 1rem;
+  transition: background-color 0.2s ease;
+}
+
+.delete-btn:hover {
+  background-color: #880000;
 }
