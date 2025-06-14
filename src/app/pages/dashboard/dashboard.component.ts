@@ -45,6 +45,7 @@ export class DashboardComponent implements OnInit {
   }
 
   getImage(itemName: string): string {
-    return `/icons/${itemName}.png`;
+    if (!itemName) return '';
+    return `/icons/${itemName.toLowerCase()}.png`;
   }
 }

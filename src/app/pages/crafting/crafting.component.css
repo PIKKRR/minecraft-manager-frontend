@@ -1,110 +1,195 @@
+:root {
+  --primary-bg: #004f4f;
+  --secondary-bg: #003333;
+  --item-bg: #1a1a1a;
+  --highlight: #00cc99;
+  --border-color: #226666;
+  --text-color: #ffffff;
+}
+
 .page {
   display: flex;
-  height: 100vh;
-  width: 100vw;
-  background-color: #004f4f;
-  color: white;
+  height: calc(100vh - 60px);
+  margin-top: 60px;
+  background-color: var(--primary-bg);
   font-family: 'Segoe UI', sans-serif;
 }
 
-/* === Columna izquierda === */
-.left-column {
-  flex: 2;
-  padding: 2rem;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-}
+.favorite-btn {
+    position: fixed;
+    top: 25%;
+    left: 90%;
+  }
 
-.search-input {
-  width: 60%;
-  max-width: 500px;
-  padding: 0.5rem;
-  font-size: 1rem;
-  margin-bottom: 1.5rem;
-  border-radius: 4px;
-  border: none;
-  text-align: center;
-}
-
-.results-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(64px, 1fr));
-  gap: 0.5rem;
+/* Mesa de crafteo Minecraft */
+.crafting-table-bg {
+  position: relative;
   width: 100%;
-  max-width: 800px;
-  justify-items: center;
-  overflow-y: auto;
-  height: calc(100vh - 180px);
+  min-height: 300px;
+  background-image: url('/craftingtable.png');
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center;
+  padding: 30px;
 }
 
-.result-item {
-  width: 64px;
-  height: 64px;
-  background-color: #1a1a1a;
-  border: 1px solid #444;
+.crafting-table-bg.empty {
+  opacity: 0.7;
+  min-height: 300px;
+  padding: 30px;
+}
+
+/* Ajustes para superponer elementos */
+.crafting-grid-container {
+  width: 160px;
+  height: 160px;
+  top: 60px;
+  right: 21%;
+  position: relative;
+  z-index: 2;
+  padding: 45px;
+  margin: 0 !important;
+  transform: translate (-50%, -50%) translateY(-10px);
+}
+
+.crafting-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 0 !important;  /* Elimina cualquier espacio entre celdas */
+  padding: 0 !important;
+  margin: 0 !important;
+  background-color: transparent !important;
+}
+
+.grid-slot {
+  position: relative;
   display: flex;
-  align-items: center;
   justify-content: center;
-  cursor: pointer;
-  transition: transform 0.1s ease;
+  align-items: center;
+  background: transparent;
+  border: none;
+  padding: 0;
+  margin: 0;
 }
 
-.result-item:hover {
-  transform: scale(1.05);
-  border-color: #00ffcc;
+.crafting-result {
+  position: absolute;
+  right: 24.5%;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 40px;
+  height: 40px;
 }
 
-.result-item img {
-  width: 48px;
-  height: 48px;
+/* Navbar fijo */
+app-navbar {
+  position: fixed;
+  top: 0;
+  width: 100%;
+  height: 60px;
+  background-color: var(--primary-bg);
+  z-index: 1000;
 }
 
-/* === Columna derecha === */
-.right-column {
-  flex: 1;
-  padding: 2rem;
-  border-left: 2px solid #226666;
+/* Grid de objetos ultra compacto */
+.items-grid-container {
+  width: 70%;
+  height: calc(100vh - 120px); /* Altura fija */
+  padding: 0.5rem;
+  overflow-y: auto;
+}
+
+.items-grid {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  grid-auto-rows: 80px; /* Altura fija por fila */
+  gap: 0.3rem;
+  min-height: 100%; /* Ocupa todo el espacio */
+}
+
+.item-card {
+  background-color: var(--item-bg);
+  border: 1px solid var(--border-color);
+  border-radius: 4px;
+  height: 100%; /* Ocupa toda la celda */
   display: flex;
   flex-direction: column;
   align-items: center;
+  justify-content: center;
+  transition: opacity 0.3s ease;
 }
 
-.grid {
+/* Mostrar solo las celdas con contenido */
+.item-card:has(img) {
+  opacity: 1;
+  cursor: pointer;
+}
+
+.item-card.selected {
+  border-color: var(--highlight);
+  background-color: rgba(0, 204, 153, 0.1);
+}
+
+.item-card:hover, .item-card.selected {
+  border-color: var(--highlight);
+}
+
+.item-card img {
+  width: 50px;
+  height: 50px;
+  object-fit: contain;
+}
+
+.item-name {
+  font-size: 0.65rem;
+  text-align: center;
+  margin-top: 0.2rem;
+}
+
+.crafting-grid {
   display: grid;
-  grid-template-columns: repeat(3, 80px);
-  gap: 6px;
-  margin-bottom: 1rem;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 3rem; /* Espaciado mínimo */
+  background-color: rgba(0, 0, 0, 0.2);
+  padding: 0.5rem;
 }
 
-.grid-cell {
-  width: 80px;
-  height: 80px;
-  background-color: #1a1a1a;
-  border: 1px solid #444;
+.grid-slot {
+  aspect-ratio: 1;
+  background-color: var(--item-bg);
+  border: 1px solid var(--border-color);
   display: flex;
   align-items: center;
   justify-content: center;
 }
 
-.grid-cell img {
-  width: 64px;
-  height: 64px;
+.grid-slot img {
+  width: 32px !important;
+  height: 32px !important;
+  object-fit: contain;
+  position: absolute;
+  top: 1%;
+  left: 50%;
+  transform: translate(-50%, -50%);
 }
 
-.result-img {
-  width: 64px;
-  height: 64px;
-  background-color: #1a1a1a;
-  border: 1px solid #444;
+.result-display img {
+  width: 60px; /* Resultado más compacto */
+  height: 60px;
+  margin-left: 30px;
 }
 
-.favorite-button {
-  background-color: #00aa88;
-  color: white;
-  padding: 0.5rem 1rem;
-  border: none;
-  border-radius: 4px;
-  margin-top: 1rem;
-  cursor: pointer;
+/* Responsive móvil */
+@media (max-width: 768px) {
+  .page {
+    flex-direction: column;
+  }
+
+  .items-grid-container, .crafting-area {
+    width: 100%;
+  }
+
+  .items-grid {
+    grid-template-columns: repeat(auto-fill, minmax(60px, 1fr));
+  }
 }

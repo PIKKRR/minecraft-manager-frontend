@@ -3,6 +3,8 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { HttpClient, HttpClientModule } from '@angular/common/http';
 import { NavbarComponent } from '../../components/navbar/navbar.component';
+import { NotificationService } from '../../services/notification.service';
+import { NotificationComponent } from '../../components/notifications/notification.component';
 
 interface World {
   id: number;
@@ -26,7 +28,8 @@ interface Waypoint {
     CommonModule,
     FormsModule,
     HttpClientModule,
-    NavbarComponent
+    NavbarComponent,
+    NotificationComponent
   ],
   templateUrl: './waypoints.component.html',
   styleUrls: ['./waypoints.component.css']
@@ -50,7 +53,10 @@ export class WaypointsComponent implements OnInit {
     notes: ''
   };
 
-  constructor(private http: HttpClient) {}
+  constructor(
+    private http: HttpClient,
+    private notificationService: NotificationService // Añade el servicio aquí
+  ) {}
 
   ngOnInit(): void {
     this.loadWorlds();
@@ -67,7 +73,10 @@ export class WaypointsComponent implements OnInit {
           this.selectWorld(worlds[0]);
         }
       },
-      error: (err) => console.error('Error loading worlds:', err)
+      error: (err) => {
+        console.error('Error loading worlds:', err);
+        this.notificationService.showError('Error al cargar los mundos');
+      }
     });
   }
 
@@ -83,7 +92,10 @@ export class WaypointsComponent implements OnInit {
       headers: { Authorization: `Bearer ${token}` }
     }).subscribe({
       next: (waypoints) => this.waypoints = waypoints,
-      error: (err) => console.error('Error loading waypoints:', err)
+      error: (err) => {
+        console.error('Error loading waypoints:', err);
+        this.notificationService.showError('Error al cargar los waypoints');
+      }
     });
   }
 
@@ -108,8 +120,12 @@ export class WaypointsComponent implements OnInit {
         this.worlds.push(world);
         this.isAddingWorld = false;
         this.selectWorld(world);
+        this.notificationService.showSuccess('Mundo creado correctamente');
       },
-      error: (err) => console.error('Error adding world:', err)
+      error: (err) => {
+        console.error('Error adding world:', err);
+        this.notificationService.showError('Error al crear el mundo');
+      }
     });
   }
 
@@ -121,7 +137,7 @@ export class WaypointsComponent implements OnInit {
     this.currentWaypoint = {
       name: '',
       x: 0,
-      y: 64,  // Valor por defecto común en Minecraft
+      y: 64,
       z: 0,
       notes: '',
       world_id: this.selectedWorld.id
@@ -159,32 +175,58 @@ export class WaypointsComponent implements OnInit {
       next: (waypoint) => {
         this.loadWaypoints(this.selectedWorld!.id);
         this.resetWaypointForms();
+        this.notificationService.showSuccess(
+          this.selectedWaypoint
+            ? 'Waypoint actualizado correctamente'
+            : 'Waypoint creado correctamente'
+        );
       },
-      error: (err) => console.error('Error saving waypoint:', err)
+      error: (err) => {
+        console.error('Error saving waypoint:', err);
+        let errorMessage = 'Error al guardar el waypoint';
+
+        if (err.status === 400 && err.error) {
+          if (err.error.x) {
+            errorMessage = `Coordenada X inválida: ${err.error.x.join(', ')}`;
+          } else if (err.error.y) {
+            errorMessage = `Coordenada Y inválida: ${err.error.y.join(', ')}`;
+          } else if (err.error.z) {
+            errorMessage = `Coordenada Z inválida: ${err.error.z.join(', ')}`;
+          } else if (err.error.name) {
+            errorMessage = `Nombre inválido: ${err.error.name.join(', ')}`;
+          }
+        }
+
+        this.notificationService.showError(errorMessage);
+      }
     });
   }
 
   deleteWaypoint(waypointId: number | undefined): void {
-  if (waypointId === undefined) {
-    console.error('No se puede eliminar un waypoint sin ID');
-    return;
-  }
+    if (waypointId === undefined) {
+      console.error('No se puede eliminar un waypoint sin ID');
+      return;
+    }
 
-  if (!confirm('¿Estás seguro de que quieres eliminar este waypoint?')) return;
+    if (!confirm('¿Estás seguro de que quieres eliminar este waypoint?')) return;
 
-  const token = localStorage.getItem('access');
-  this.http.delete(`http://localhost:8000/api/waypoints/waypoints/${waypointId}/`, {
-    headers: { Authorization: `Bearer ${token}` }
-  }).subscribe({
-    next: () => {
-      if (this.selectedWorld) {
-        this.loadWaypoints(this.selectedWorld.id);
+    const token = localStorage.getItem('access');
+    this.http.delete(`http://localhost:8000/api/waypoints/waypoints/${waypointId}/`, {
+      headers: { Authorization: `Bearer ${token}` }
+    }).subscribe({
+      next: () => {
+        if (this.selectedWorld) {
+          this.loadWaypoints(this.selectedWorld.id);
+        }
+        this.resetWaypointForms();
+        this.notificationService.showSuccess('Waypoint eliminado correctamente');
+      },
+      error: (err) => {
+        console.error('Error deleting waypoint:', err);
+        this.notificationService.showError('Error al eliminar el waypoint');
       }
-      this.resetWaypointForms();
-    },
-    error: (err) => console.error('Error deleting waypoint:', err)
-  });
-}
+    });
+  }
 
   resetWaypointForms(): void {
     this.isAddingWaypoint = false;

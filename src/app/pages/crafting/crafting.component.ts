@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormControl, ReactiveFormsModule } from '@angular/forms';
 import { HttpClient, HttpClientModule } from '@angular/common/http';
-import { debounceTime, switchMap } from 'rxjs/operators';
+import { debounceTime, switchMap, startWith } from 'rxjs/operators';
 import { NavbarComponent } from '../../components/navbar/navbar.component';
 
 interface FavoriteRecipe {
@@ -32,21 +32,20 @@ export class CraftingComponent implements OnInit {
   searchControl = new FormControl('');
   filteredRecipes: any[] = [];
   selectedRecipe?: any;
+  isLoading = true;
 
   constructor(private http: HttpClient) {}
 
   ngOnInit(): void {
+    // Cargar todas las recetas al inicio
+    this.loadAllRecipes();
+
     this.searchControl.valueChanges.pipe(
       debounceTime(300),
       switchMap(query => {
-        const token = localStorage.getItem('access');
         return this.http.get<any[]>(
           `http://localhost:8000/api/crafting/?search=${query}`,
-          {
-            headers: {
-              Authorization: `Bearer ${token}`
-            }
-          }
+          this.getAuthHeaders()
         );
       })
     ).subscribe(data => {
@@ -54,15 +53,27 @@ export class CraftingComponent implements OnInit {
     });
   }
 
+  loadAllRecipes() {
+    this.isLoading = true;
+    this.http.get<any[]>(
+      'http://localhost:8000/api/crafting/',
+      this.getAuthHeaders()
+    ).subscribe({
+      next: (data) => {
+        this.filteredRecipes = data;
+        this.isLoading = false;
+      },
+      error: (err) => {
+        console.error('Error al cargar recetas:', err);
+        this.isLoading = false;
+      }
+    });
+  }
+
   selectRecipe(recipe: any) {
-    const token = localStorage.getItem('access');
     this.http.get<any>(
       `http://localhost:8000/api/crafting/${recipe.id}/`,
-      {
-        headers: {
-          Authorization: `Bearer ${token}`
-        }
-      }
+      this.getAuthHeaders()
     ).subscribe(data => {
       this.selectedRecipe = data;
     });
@@ -74,12 +85,6 @@ export class CraftingComponent implements OnInit {
   }
 
   addToFavorites() {
-    const token = localStorage.getItem('access');
-    if (!token) {
-      alert('Debes iniciar sesión para guardar favoritos');
-      return;
-    }
-
     if (!this.selectedRecipe?.id) {
       console.error('No hay receta seleccionada');
       return;
@@ -88,12 +93,7 @@ export class CraftingComponent implements OnInit {
     this.http.post<FavoriteRecipe>(
       'http://localhost:8000/api/crafting/favorites/',
       { recipe: this.selectedRecipe.id },
-      {
-        headers: {
-          'Authorization': `Bearer ${token}`,
-          'Content-Type': 'application/json'
-        }
-      }
+      this.getAuthHeaders()
     ).subscribe({
       next: (response) => {
         console.log('Favorito creado:', response);
@@ -110,5 +110,15 @@ export class CraftingComponent implements OnInit {
         }
       }
     });
+  }
+
+  private getAuthHeaders() {
+    const token = localStorage.getItem('access');
+    return {
+      headers: {
+        'Authorization': `Bearer ${token}`,
+        'Content-Type': 'application/json'
+      }
+    };
   }
 }

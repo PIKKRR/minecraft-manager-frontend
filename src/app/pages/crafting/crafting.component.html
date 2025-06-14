@@ -1,38 +1,60 @@
 <app-navbar></app-navbar>
-<div class="page">
-  <!-- Zona izquierda: buscador y grid -->
-  <div class="left-column">
-    <input [formControl]="searchControl" placeholder="BUSCA AQUI TU RECETA" class="search-input"/>
 
-    <div class="results-grid">
+<div class="page">
+  <!-- Grid de 7 columnas (sin cambios) -->
+  <div class="items-grid-container">
+    <input [formControl]="searchControl" placeholder="BUSCA RECETAS..." class="search-input"/>
+
+    <div *ngIf="isLoading" class="loading">Cargando recetas...</div>
+
+    <div class="items-grid" *ngIf="!isLoading">
       <div
-        class="result-item"
+        class="item-card"
         *ngFor="let recipe of filteredRecipes"
         (click)="selectRecipe(recipe)"
+        [class.selected]="selectedRecipe?.id === recipe.id"
         title="{{ recipe.output.name }}"
       >
-        <img [src]="getImage(recipe.output.name)"/>
+        <img [src]="getImage(recipe.output.name)" [alt]="recipe.output.name"/>
+        <span class="item-name">{{ recipe.output.name }}</span>
       </div>
     </div>
   </div>
 
-  <!-- Zona derecha: detalle -->
-  <div class="right-column" *ngIf="selectedRecipe">
-    <h2>{{ selectedRecipe.name }}</h2>
-
-    <div class="grid">
-      <ng-container *ngFor="let item of selectedRecipe.grid">
-        <div class="grid-cell">
-          <img *ngIf="item" [src]="getImage(item)"/>
+  <!-- Área de crafteo (modificado solo el fondo) -->
+  <div class="crafting-area">
+    <div class="crafting-preview" *ngIf="selectedRecipe; else emptyState">
+      <!-- Mesa de crafteo como fondo -->
+      <div class="crafting-table-bg">
+        <!-- Grid superpuesto (mismo HTML que tenías) -->
+        <div class="crafting-grid-container">
+          <div class="crafting-grid">
+            <ng-container *ngFor="let item of selectedRecipe.grid">
+              <div class="grid-slot">
+                <img *ngIf="item" [src]="getImage(item)" [alt]="item"/>
+              </div>
+            </ng-container>
+          </div>
         </div>
-      </ng-container>
+
+        <!-- Resultado (mismo HTML) -->
+        <div class="crafting-result">
+          <div class="result-display">
+            <img [src]="getImage(selectedRecipe.output.name)" [alt]="selectedRecipe.output.name"/>
+          </div>
+        </div>
+      </div>
+
+      <button class="favorite-btn" (click)="addToFavorites()">
+        <span class="icon">💖</span> Añadir a favoritos
+      </button>
     </div>
 
-    <p><strong>Resultado:</strong></p>
-    <img [src]="getImage(selectedRecipe.output.name)" class="result-img"/>
+    <ng-template #emptyState>
+      <!-- Mesa vacía -->
+      <div class="crafting-table-bg empty">
+        <p>Selecciona un objeto para ver su receta</p>
+      </div>
+    </ng-template>
   </div>
-  <div class="favorite-wrapper">
-    <button class="favorite-button" (click)="addToFavorites()">💖 Guardar en favoritos</button>
-  </div>
-
 </div>

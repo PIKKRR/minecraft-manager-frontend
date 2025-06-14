@@ -1,34 +1,18 @@
-body {
-  background: url("/background.png") no-repeat center center;
-  background-size: cover;
-}
-
-/* Estilos base que ya tenías */
 .dashboard-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-  gap: 2rem;
+  gap: 1.5rem;
   margin-top: 2rem;
 }
 
-.dashboard-card {
-  background: #1a1a1a;
-  padding: 1.5rem;
-  border-radius: 8px;
-  transition: transform 0.2s ease;
-}
-
-.dashboard-card:hover {
-  transform: translateY(-5px);
-  box-shadow: 0 10px 20px rgba(0,0,0,0.2);
-}
-
-/* Estilos específicos para favoritos */
 .favorites-section {
   min-height: 300px;
 }
 
 .favorites-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.8rem;
   margin-top: 1rem;
 }
 
@@ -36,15 +20,15 @@ body {
   display: flex;
   align-items: center;
   gap: 1rem;
-  padding: 0.8rem;
-  background: #2a2a2a;
+  padding: 0.5rem;
+  background-color: rgba(255, 255, 255, 0.05);
   border-radius: 4px;
-  margin-bottom: 0.5rem;
 }
 
 .favorite-item img {
   width: 40px;
   height: 40px;
+  object-fit: contain;
 }
 
 .favorite-name {
@@ -52,7 +36,7 @@ body {
 }
 
 .delete-btn {
-  background: transparent;
+  background: none;
   border: none;
   color: #ff6b6b;
   cursor: pointer;
@@ -60,7 +44,7 @@ body {
 }
 
 .empty-message {
-  color: #777;
+  color: rgba(255, 255, 255, 0.5);
   text-align: center;
-  margin-top: 2rem;
+  margin-top: 1rem;
 }

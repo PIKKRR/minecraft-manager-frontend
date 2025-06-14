@@ -9,3 +9,20 @@ body {
   background: url("/background.png") no-repeat center center;
   background-size: cover;
 }
+
+/* Evita que las notificaciones sean muy anchas */
+app-notification {
+  display: block;
+  max-width: 300px;
+  width: auto;
+}
+
+/* Opcional: Asegura que el navbar no cubra las notificaciones */
+app-navbar {
+  position: relative;
+  z-index: 100;
+}
+
+app-notification {
+  z-index: 99; /* Un poco menor que el navbar */
+}
