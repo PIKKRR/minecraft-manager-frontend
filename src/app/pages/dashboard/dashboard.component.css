@@ -45,6 +45,7 @@ app-navbar {
 /* Dashboard Header */
 .dashboard-header {
   margin-bottom: 20px;
+  color: white;
 }
 
 .dashboard-header h2 {
@@ -109,6 +110,7 @@ app-navbar {
   font-size: 1.8rem;
   margin: 0 0 8px 0;
   font-weight: 700;
+  color: white;
 }
 
 .card-content p {
@@ -133,6 +135,7 @@ app-navbar {
 .recent-waypoints-card li {
   font-size: 0.9rem;
   margin-bottom: 4px;
+  color: white;
 }
 
 /* Favoritos list */
@@ -142,6 +145,7 @@ app-navbar {
   padding-right: 0;
   margin-top: 12px;
   user-select: none;
+  color:white;
 }
 
 /* Loading spinner and text */
