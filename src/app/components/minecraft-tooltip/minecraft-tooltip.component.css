@@ -1,0 +1,24 @@
+.tooltip {
+      position: fixed;
+      background: #222;
+      color: white;
+      font-family: 'Minecraft', monospace, monospace;
+      font-size: 12px;
+      padding: 4px 8px;
+      border: 1px solid white;
+      border-radius: 3px;
+      pointer-events: none;
+      user-select: none;
+      white-space: nowrap;
+      opacity: 0;
+      transition: opacity 0.15s ease-in-out;
+      z-index: 2000;
+      text-shadow:
+        1px 1px 0 #000,
+        -1px -1px 0 #000,
+        1px -1px 0 #000,
+        -1px 1px 0 #000;
+    }
+    .tooltip.visible {
+      opacity: 1;
+    }

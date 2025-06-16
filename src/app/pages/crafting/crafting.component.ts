@@ -1,11 +1,12 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormControl, ReactiveFormsModule } from '@angular/forms';
 import { HttpClient, HttpClientModule } from '@angular/common/http';
-import { debounceTime, switchMap, startWith } from 'rxjs/operators';
+import { debounceTime, switchMap } from 'rxjs/operators';
 import { NavbarComponent } from '../../components/navbar/navbar.component';
 import { NotificationService } from '../../services/notification.service';
 import { NotificationComponent } from '../../components/notifications/notification.component';
+import { MinecraftTooltipComponent } from '../../components/minecraft-tooltip/minecraft-tooltip.component';
 
 interface FavoriteRecipe {
   id: number;
@@ -27,6 +28,7 @@ interface FavoriteRecipe {
     HttpClientModule,
     NavbarComponent,
     NotificationComponent,
+    MinecraftTooltipComponent
   ],
   templateUrl: './crafting.component.html',
   styleUrls: ['./crafting.component.css']
@@ -37,13 +39,14 @@ export class CraftingComponent implements OnInit {
   selectedRecipe?: any;
   isLoading = true;
 
+  @ViewChild('tooltip') tooltip!: MinecraftTooltipComponent;
+
   constructor(
     private http: HttpClient,
     private notificationService: NotificationService
-    ) {}
+  ) {}
 
   ngOnInit(): void {
-    // Cargar todas las recetas al inicio
     this.loadAllRecipes();
 
     this.searchControl.valueChanges.pipe(
@@ -60,7 +63,6 @@ export class CraftingComponent implements OnInit {
   }
 
   loadAllRecipes() {
-    const token = localStorage.getItem('access');
     this.isLoading = true;
     this.http.get<any[]>(
       'http://localhost:8000/api/crafting/',
@@ -78,7 +80,6 @@ export class CraftingComponent implements OnInit {
   }
 
   selectRecipe(recipe: any) {
-    const token = localStorage.getItem('access');
     this.http.get<any>(
       `http://localhost:8000/api/crafting/${recipe.id}/`,
       this.getAuthHeaders()
@@ -93,52 +94,51 @@ export class CraftingComponent implements OnInit {
   }
 
   addToFavorites() {
-  if (!this.selectedRecipe?.id) {
-    this.notificationService.showError('No hay receta seleccionada');
-    console.error('No hay receta seleccionada');
-    return;
-  }
-
-  const token = localStorage.getItem('access');
-  if (!token) {
-    alert('No estás autenticado. Por favor inicia sesión.');
-    return;
-  }
-
-  const favoriteData = {
-    recipe_id: this.selectedRecipe.id
-  };
-
-  this.http.post<FavoriteRecipe>(
-    'http://localhost:8000/api/crafting/favorites/',
-    favoriteData,
-    {
-      headers: {
-        'Authorization': `Bearer ${token}`,
-        'Content-Type': 'application/json'
-      }
+    if (!this.selectedRecipe?.id) {
+      this.notificationService.showError('No hay receta seleccionada');
+      console.error('No hay receta seleccionada');
+      return;
     }
-  ).subscribe({
-    next: (response) => {
-      console.log('Favorito creado:', response);
-      this.notificationService.showSuccess('¡Receta agregada a favoritos!');
-    },
-    error: (err) => {
-      console.error('Error completo:', err);
-      if (err.status === 400) {
-        // Mostrar el mensaje de error específico del backend
-        const errorMsg = err.error?.detail ||
-                         err.error?.message ||
-                         'Esta receta ya está en tus favoritos o los datos son inválidos';
-        alert(errorMsg);
-      } else if (err.status === 401) {
-        alert('Tu sesión ha expirado. Por favor inicia sesión nuevamente.');
-      } else {
-        alert(`Error al guardar favorito: ${err.statusText}`);
-      }
+
+    const token = localStorage.getItem('access');
+    if (!token) {
+      alert('No estás autenticado. Por favor inicia sesión.');
+      return;
     }
-  });
-}
+
+    const favoriteData = {
+      recipe_id: this.selectedRecipe.id
+    };
+
+    this.http.post<FavoriteRecipe>(
+      'http://localhost:8000/api/crafting/favorites/',
+      favoriteData,
+      {
+        headers: {
+          'Authorization': `Bearer ${token}`,
+          'Content-Type': 'application/json'
+        }
+      }
+    ).subscribe({
+      next: (response) => {
+        console.log('Favorito creado:', response);
+        this.notificationService.showSuccess('¡Receta agregada a favoritos!');
+      },
+      error: (err) => {
+        console.error('Error completo:', err);
+        if (err.status === 400) {
+          const errorMsg = err.error?.detail ||
+            err.error?.message ||
+            'Esta receta ya está en tus favoritos o los datos son inválidos';
+          alert(errorMsg);
+        } else if (err.status === 401) {
+          alert('Tu sesión ha expirado. Por favor inicia sesión nuevamente.');
+        } else {
+          alert(`Error al guardar favorito: ${err.statusText}`);
+        }
+      }
+    });
+  }
 
   private getAuthHeaders() {
     const token = localStorage.getItem('access');
@@ -148,5 +148,23 @@ export class CraftingComponent implements OnInit {
         'Content-Type': 'application/json'
       }
     };
+  }
+
+  // Métodos tooltip
+
+  showTooltip(event: MouseEvent, itemName: string) {
+    const x = event.pageX + 10;
+    const y = event.pageY - 30;
+    this.tooltip.show(itemName, x, y);
+  }
+
+  moveTooltip(event: MouseEvent) {
+    const x = event.pageX + 10;
+    const y = event.pageY - 30;
+    this.tooltip.move(x, y);
+  }
+
+  hideTooltip() {
+    this.tooltip.hide();
   }
 }

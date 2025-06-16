@@ -167,19 +167,26 @@
 }
 
 .add-waypoint-btn {
-  background-color: #288e70;
-  color: white;
-  padding: 0.5rem 1rem;
+  transform: translate(-5%, -5%);
+  background-color: grey;
+  color: #fff;
   border: none;
-  border-radius: 4px;
-  margin-top: 1rem;
+  border-radius: 2rem;
+  padding: 0.6rem 1.2rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.85rem;
+  font-weight: 600;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
   cursor: pointer;
-  width: 100%;
-  transition: background-color 0.2s ease;
+  transition: background-color 0.3s ease, transform 0.2s ease;
+  z-index: 10;
 }
 
 .add-waypoint-btn:hover {
-  background-color: #1f7a5f;
+  background-color: #00e6aa;
+  transform: scale(1.02);
 }
 
 /* === Columna derecha (detalle/edición) === */
@@ -223,33 +230,47 @@
 }
 
 .save-btn {
-  background-color: #00aa88;
-  color: white;
-  padding: 0.75rem;
+  transform: translate(-5%, -5%);
+  background-color: grey;
+  color: #fff;
   border: none;
-  border-radius: 4px;
+  border-radius: 2rem;
+  padding: 0.6rem 1.2rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.85rem;
+  font-weight: 600;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
   cursor: pointer;
-  font-weight: bold;
-  margin-top: 1rem;
-  transition: background-color 0.2s ease;
+  transition: background-color 0.3s ease, transform 0.2s ease;
+  z-index: 10;
 }
 
 .save-btn:hover {
-  background-color: #008c6d;
+  background-color: #00e6aa;
+  transform: scale(1.02);
 }
 
 .delete-btn {
-  background-color: #aa0000;
-  color: white;
-  padding: 0.75rem;
+  transform: translate(-5%, -5%);
+  background-color: grey;
+  color: #fff;
   border: none;
-  border-radius: 4px;
+  border-radius: 2rem;
+  padding: 0.6rem 1.2rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.85rem;
+  font-weight: 600;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
   cursor: pointer;
-  font-weight: bold;
-  margin-top: 1rem;
-  transition: background-color 0.2s ease;
+  transition: background-color 0.3s ease, transform 0.2s ease;
+  z-index: 10;
 }
 
 .delete-btn:hover {
-  background-color: #880000;
+  background-color: #00e6aa;
+  transform: scale(1.02);
 }
