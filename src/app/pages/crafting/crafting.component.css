@@ -15,13 +15,46 @@
   font-family: 'Segoe UI', sans-serif;
 }
 
+/* Botón de favoritos */
+
 .favorite-btn {
-    position: fixed;
-    top: 26.5%;
-    left: 90%;
-    height: 10%;
-    width: 10%;
-  }
+  position: fixed;
+  top: 36%;
+  left: 76%;
+  transform: translate(-5%, -5%);
+  background-color: grey;
+  color: #fff;
+  border: none;
+  border-radius: 2rem;
+  padding: 0.6rem 1.2rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.85rem;
+  font-weight: 600;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+  cursor: pointer;
+  transition: background-color 0.3s ease, transform 0.2s ease;
+  z-index: 10;
+}
+
+.favorite-btn:hover {
+  background-color: #00e6aa;
+  transform: scale(1.02);
+}
+
+.heart-icon {
+  font-size: 1.2rem;
+  transition: transform 0.3s ease;
+}
+
+.favorite-btn:hover .heart-icon {
+  transform: scale(1.1);
+}
+
+.btn-text {
+  white-space: nowrap;
+}
 
 /* Mesa de crafteo Minecraft */
 .crafting-table-bg {

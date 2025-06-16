@@ -16,7 +16,10 @@
         <button (click)="deleteWorld(world.id); $event.stopPropagation()">🗑️</button>
       </div>
     </div>
-    <button class="add-world-btn" (click)="showAddWorldForm()">+ Añadir Mundo</button>
+    <button class="add-world-btn" (click)="showAddWorldForm()">
+      <span class="world-plus-icon">+</span>
+      <span class="world-btn-text">Añadir Mundo</span>
+    </button>
 
     <!-- Formulario para añadir mundo -->
     <div *ngIf="isAddingWorld" class="world-form">
