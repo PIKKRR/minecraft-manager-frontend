@@ -243,7 +243,7 @@ app-navbar {
 .tooltip {
   position: absolute;
   top: 110%;
-  left: 50%;
+  left: 10%;
   transform: translateX(-50%) translateY(12px);
   background-color: var(--tooltip-bg);
   border: 1.5px solid var(--tooltip-border);
@@ -292,6 +292,7 @@ app-navbar {
   border-radius: 8px;
   border: 1px solid var(--accent-green);
   box-shadow: 0 0 6px rgba(56, 178, 172, 0.4);
+  padding-left: 10px;
 }
 
 .grid-cell img {
