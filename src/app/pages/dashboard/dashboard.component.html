@@ -12,19 +12,22 @@
 
       <!-- Tarjeta de Recent Waypoints -->
       <div class="dashboard-card recent-waypoints-card">
-        <div class="card-icon">🕒</div>
-        <div class="card-content">
+        <div class="card-header">
+          <div class="card-icon">🕒</div>
           <h3>Waypoints Recientes</h3>
+        </div>
 
+        <div class="card-content">
           <div *ngIf="recentWaypoints.length === 0">
             <p>No has creado waypoints todavía.</p>
           </div>
 
-          <ul class="recent-list" *ngIf="recentWaypoints.length > 0">
-            <li *ngFor="let wp of recentWaypoints">
+          <div class="recent-list" *ngIf="recentWaypoints.length > 0">
+            <div *ngFor="let wp of recentWaypoints">
+              <strong>{{ wp.world.name }} - </strong>
               <strong>{{ wp.name }}</strong> – ({{ wp.x }}, {{ wp.y }}, {{ wp.z }})
-            </li>
-          </ul>
+            </div>
+          </div>
 
           <div class="card-hover-effect" routerLink="/waypoints">
             Ver todos →
@@ -32,12 +35,16 @@
         </div>
       </div>
 
+
       <!-- Tarjeta de Favoritos -->
       <div class="dashboard-card favorites-card">
-        <div class="card-icon">❤️</div>
-        <div class="card-content">
+        <!-- NUEVO: Encapsulamos icono y título en .card-header -->
+        <div class="card-header">
+          <div class="card-icon">❤️</div>
           <h3>Tus Recetas Favoritas</h3>
+        </div>
 
+        <div class="card-content">
           <div class="favorites-list">
             <div *ngIf="isLoading" class="loading-message">
               <div class="spinner"></div>
@@ -51,18 +58,24 @@
                 <small>Agrega algunas desde el libro de recetas</small>
               </div>
 
-              <div class="favorite-item" *ngFor="let favorite of favorites"
-                   (mouseenter)="showTooltip(favorite.recipe)"
-                   (mouseleave)="hideTooltip()"
-                   style="position: relative;">
-
-                <img [src]="getImage(favorite.recipe.output ? favorite.recipe.output.name : undefined)"
-                     [alt]="favorite.recipe.name"
-                     (error)="handleImageError($event)"/>
+              <div
+                class="favorite-item"
+                *ngFor="let favorite of favorites"
+                (mouseenter)="showTooltip(favorite.recipe)"
+                (mouseleave)="hideTooltip()"
+                style="position: relative;"
+              >
+                <img
+                  [src]="getImage(favorite.recipe.output ? favorite.recipe.output.name : undefined)"
+                  [alt]="favorite.recipe.name"
+                  (error)="handleImageError($event)"
+                />
                 <span class="favorite-name">{{ favorite.recipe.name }}</span>
-                <button class="delete-btn"
-                        (click)="deleteFavorite(favorite.id, $event)"
-                        title="Eliminar favorito">
+                <button
+                  class="delete-btn"
+                  (click)="deleteFavorite(favorite.id, $event)"
+                  title="Eliminar favorito"
+                >
                   <i class="delete-icon">×</i>
                 </button>
 
@@ -75,10 +88,12 @@
                   </div>
                   <div class="arrow">→</div>
                   <div class="output-item">
-                    <img [src]="getImage(tooltipRecipe?.output?.name)" [alt]="tooltipRecipe?.output?.name"/>
+                    <img
+                      [src]="getImage(tooltipRecipe?.output?.name)"
+                      [alt]="tooltipRecipe?.output?.name"
+                    />
                   </div>
                 </div>
-
               </div>
             </div>
           </div>

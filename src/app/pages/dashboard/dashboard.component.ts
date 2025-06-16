@@ -23,9 +23,15 @@ interface Favorite {
   recipe: Recipe;
 }
 
+interface World {
+  id: number;
+  name: string;
+}
+
 interface Waypoint {
   id: number;
   name: string;
+  world: World;
   x: number;
   y: number;
   z: number;

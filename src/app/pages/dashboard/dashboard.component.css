@@ -68,6 +68,7 @@ app-navbar {
   display: flex;
   gap: 20px;
   flex-wrap: wrap;
+  width: 100%;
 }
 
 /* Card base */
@@ -76,13 +77,14 @@ app-navbar {
   border-radius: 14px;
   padding: 24px 28px;
   box-shadow: 0 6px 18px rgba(0, 0, 0, 0.5);
-  color: var(--text-primary);
+  color: white;
   flex: 1 1 320px;
   cursor: default;
   position: relative;
   transition: background-color 0.3s ease, transform 0.3s ease;
   display: flex;
   flex-direction: column;
+  border: 1px solid white;
 }
 
 .dashboard-card:hover {
@@ -125,18 +127,6 @@ app-navbar {
   opacity: 1;
   transition: opacity 0.3s ease;
   cursor: pointer;
-}
-
-.recent-waypoints-card ul {
-  margin-top: 0.5rem;
-  padding-left: 1rem;
-  list-style-type: disc;
-}
-
-.recent-waypoints-card li {
-  font-size: 0.9rem;
-  margin-bottom: 4px;
-  color: white;
 }
 
 /* Favoritos list */
@@ -196,6 +186,7 @@ app-navbar {
   margin-bottom: 12px;
   box-shadow: inset 0 0 8px rgba(0,0,0,0.6);
   transition: background-color 0.3s ease;
+  background-color: grey;
 }
 
 .favorite-item:hover {
@@ -322,4 +313,14 @@ app-navbar {
 
 .output-item img:hover {
   transform: scale(1.1);
+}
+
+.card-header {
+  display: flex;
+  align-items: center;
+  gap: 8px; /* espacio entre icono y título */
+}
+
+.card-icon {
+  font-size: 3em; /* agranda un poco el icono si quieres */
 }
