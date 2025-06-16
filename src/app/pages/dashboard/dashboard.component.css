@@ -121,9 +121,10 @@ app-navbar {
 
 .card-hover-effect {
   font-weight: 600;
-  color: var(--accent-green);
-  opacity: 0;
+  color: white;
+  opacity: 1;
   transition: opacity 0.3s ease;
+  cursor: pointer;
 }
 
 .recent-waypoints-card ul {

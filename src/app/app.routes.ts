@@ -15,6 +15,6 @@ export const routes: Routes = [
   loadComponent: () => import('./pages/waypoints/waypoints.component').then(m => m.WaypointsComponent),
   canActivate: [AuthGuard]
   },
-  { path: 'account', component: AccountComponent},
+  { path: 'account', component: AccountComponent, canActivate: [AuthGuard] },
   { path: '**', redirectTo: '' }
 ];

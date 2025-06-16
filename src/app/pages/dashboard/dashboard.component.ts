@@ -14,7 +14,7 @@ interface Recipe {
   id: number;
   name: string;
   output?: RecipeOutput;
-  // Aquí agregamos el grid, un array de 9 posiciones con items o null
+  // Aquí agrego el grid, un array de 9 posiciones con items o null
   grid: ( { name: string } | null )[];
 }
 
