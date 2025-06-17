@@ -324,3 +324,9 @@ app-navbar {
 .card-icon {
   font-size: 3em; /* agranda un poco el icono si quieres */
 }
+
+.recent-list {
+  width: 1000px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
