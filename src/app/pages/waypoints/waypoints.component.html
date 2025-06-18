@@ -23,17 +23,17 @@
 
     <!-- Formulario para añadir mundo -->
     <div *ngIf="isAddingWorld" class="world-form">
-      <input [(ngModel)]="newWorldName" placeholder="Nombre del mundo" />
-      <button (click)="addWorld()">Guardar</button>
-      <button (click)="cancelAddWorld()">Cancelar</button>
+      <input class="world-name" [(ngModel)]="newWorldName" placeholder="Nombre del mundo" />
+      <button class="save-world" (click)="addWorld()">Guardar</button>
+      <button class="cancel-save-world" (click)="cancelAddWorld()">Cancelar</button>
     </div>
 
     <!-- Formulario para editar mundo -->
     <div *ngIf="isEditingWorld" class="world-form">
       <h3>Editar Mundo</h3>
-      <input [(ngModel)]="editingWorldName" placeholder="Nombre del mundo" />
-      <button (click)="updateWorld()">Guardar</button>
-      <button (click)="cancelEditWorld()">Cancelar</button>
+      <input class="world-name" [(ngModel)]="editingWorldName" placeholder="Nombre del mundo" />
+      <button class="save-world" (click)="updateWorld()">Guardar</button>
+      <button class="cancel-save-world" (click)="cancelEditWorld()">Cancelar</button>
     </div>
   </div>
 
@@ -61,27 +61,27 @@
       <form class="waypoint-form" (ngSubmit)="saveWaypoint()">
         <div class="form-group">
           <label>Nombre:</label>
-          <input [(ngModel)]="currentWaypoint.name" name="name" required />
+          <input class="waypoint-name" [(ngModel)]="currentWaypoint.name" name="name" required />
         </div>
 
         <div class="coords-group">
           <div class="form-group">
             <label>Coordenada X:</label>
-            <input type="number" [(ngModel)]="currentWaypoint.x" name="x" step="0.01" required />
+            <input id="x-coord" type="number" [(ngModel)]="currentWaypoint.x" name="x" step="0.01" required />
           </div>
           <div class="form-group">
             <label>Coordenada Y:</label>
-            <input type="number" [(ngModel)]="currentWaypoint.y" name="y" step="0.01" required />
+            <input id="y-coord" type="number" [(ngModel)]="currentWaypoint.y" name="y" step="0.01" required />
           </div>
           <div class="form-group">
             <label>Coordenada Z:</label>
-            <input type="number" [(ngModel)]="currentWaypoint.z" name="z" step="0.01" required />
+            <input id="z-coord" type="number" [(ngModel)]="currentWaypoint.z" name="z" step="0.01" required />
           </div>
         </div>
 
         <div class="form-group">
           <label>Observaciones:</label>
-          <textarea [(ngModel)]="currentWaypoint.notes" name="notes" rows="4"></textarea>
+          <textarea id="obs-input" [(ngModel)]="currentWaypoint.notes" name="notes" rows="4"></textarea>
         </div>
 
         <button type="submit" class="save-btn">Guardar</button>
