@@ -17,10 +17,18 @@ export const AuthInterceptor: HttpInterceptorFn = (
   const http = inject(HttpClient);
   const router = inject(Router);
 
+  // Clonar la petición con los headers necesarios
+  let clonedReq = req.clone({
+    withCredentials: true // Importante para CORS con credenciales
+  });
+
+  // Agregar token de acceso si existe
   const access = localStorage.getItem('access');
-  const clonedReq = access
-    ? req.clone({ headers: req.headers.set('Authorization', `Bearer ${access}`) })
-    : req;
+  if (access) {
+    clonedReq = clonedReq.clone({
+      headers: clonedReq.headers.set('Authorization', `Bearer ${access}`)
+    });
+  }
 
   return next(clonedReq).pipe(
     catchError(err => {
@@ -33,12 +41,15 @@ export const AuthInterceptor: HttpInterceptorFn = (
           return throwError(() => err);
         }
 
-        return http.post<{ access: string }>('/api/token/refresh/', { refresh }).pipe(
+        return http.post<{ access: string }>('/api/token/refresh/', { refresh }, {
+          withCredentials: true // Asegurar CORS en la petición de refresh
+        }).pipe(
           switchMap(response => {
             localStorage.setItem('access', response.access);
 
             const retryReq = req.clone({
-              headers: req.headers.set('Authorization', `Bearer ${response.access}`)
+              headers: req.headers.set('Authorization', `Bearer ${response.access}`),
+              withCredentials: true
             });
             return next(retryReq);
           }),
